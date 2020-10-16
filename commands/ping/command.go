@@ -28,5 +28,9 @@ func MakePingCommand(s *discordgo.Session, m *discordgo.MessageCreate) *PingComm
 }
 
 func (c *PingCommand) Execute() {
-	c.Receiver.Answer(c.Payload)
+	c.Receiver.Answer(c.GetPayload())
+}
+
+func (c *PingCommand) GetPayload() *PingCommandPayload {
+	return c.Payload
 }

@@ -1,5 +1,8 @@
 package commands
 
 type Command interface {
-	execute() error
+	Execute() error
+	GetPayload() error
 }
+
+type CommandPayload interface {}
