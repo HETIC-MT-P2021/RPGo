@@ -1,10 +1,10 @@
 package main
 
 import (
-	"RPGo/commands/ping"
-	"RPGo/database"
 	"flag"
 	"fmt"
+	"github.com/HETIC-MT-P2021/RPGo/commands/ping"
+	"github.com/HETIC-MT-P2021/RPGo/database"
 	"github.com/bwmarrin/discordgo"
 	"github.com/caarlos0/env/v6"
 	"log"
