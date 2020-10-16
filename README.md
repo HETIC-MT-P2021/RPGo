@@ -1,8 +1,7 @@
 # RPGo 💣
 
 Simple Discord Bot for a School project written in GO.
-This bot will allow you to create your own RPG character and fight against enormous monster
-to become the strongest one.
+This bot will allow you to create your own RPG character and fight against enormous monster to become the strongest one.
 
 ## Usage
 
