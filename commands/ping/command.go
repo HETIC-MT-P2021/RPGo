@@ -6,12 +6,12 @@ import (
 
 type PingCommand struct {
 	Receiver *Receiver
-	Payload  *PingCommandPayload
+	payload  *PingCommandPayload
 }
 
 type PingCommandPayload struct {
 	Answer  string
-	Session *discordgo.Session
+	session *discordgo.Session
 	Message *discordgo.MessageCreate
 }
 
@@ -19,18 +19,22 @@ func MakePingCommand(s *discordgo.Session, m *discordgo.MessageCreate) *PingComm
 
 	return &PingCommand{
 		Receiver: &Receiver{},
-		Payload: &PingCommandPayload{
+		payload: &PingCommandPayload{
 			Answer:  "Pong!",
-			Session: s,
+			session: s,
 			Message: m,
 		},
 	}
 }
 
 func (c *PingCommand) Execute() {
-	c.Receiver.Answer(c.GetPayload())
+	c.Receiver.Answer(c.Payload())
 }
 
-func (c *PingCommand) GetPayload() *PingCommandPayload {
-	return c.Payload
+func (c *PingCommand) Payload() *PingCommandPayload {
+	return c.payload
+}
+
+func (p *PingCommandPayload) Session() *discordgo.Session {
+	return p.session
 }
