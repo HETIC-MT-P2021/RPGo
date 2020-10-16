@@ -9,6 +9,8 @@ to become the strongest one.
 ```git config core.hooksPath .githooks```
 > Configure GitHooks
 
+```cp docker-compose.override.yml.dist docker-compose.override.yml```
+> Docker configuration override, don't forget to add the Token and SQL variables
 
 ``` docker-compose up --build```
 > Run the project

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"RPGo/commands/ping"
+	"RPGo_Gp01/commands/ping"
 	"flag"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
