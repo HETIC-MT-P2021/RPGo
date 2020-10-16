@@ -1,10 +1,13 @@
 package main
 
 import (
-	"RPGo_Gp01/commands/ping"
+	"RPGo/commands/ping"
+	"RPGo/database"
 	"flag"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/caarlos0/env/v6"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -20,9 +23,23 @@ func init() {
 	flag.Parse()
 }
 
+type DiscordConfig struct {
+	Token string `env:"TOKEN"`
+}
+
 func main() {
+	if err := database.Connect(); err != nil {
+		log.Fatalf("could not connect to database: %v", err)
+	}
+	log.Printf("connected to database")
+
+	dsConfig := DiscordConfig{}
+	if err := env.Parse(&dsConfig); err != nil {
+		return
+	}
+
 	// Create a new Discord session using the provided bot token.
-	dg, err := discordgo.New("Bot " + "")
+	dg, err := discordgo.New("Bot " + dsConfig.Token)
 	if err != nil {
 		fmt.Println("error creating Discord session,", err)
 		return
