@@ -1,4 +1,4 @@
-module RPGo
+module github.com/HETIC-MT-P2021/RPGo
 
 go 1.13
 

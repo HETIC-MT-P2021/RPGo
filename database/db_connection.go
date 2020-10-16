@@ -3,8 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"github.com/caarlos0/env"
-	_ "github.com/caarlos0/env/v6"
+	"github.com/caarlos0/env/v6"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"time"
@@ -17,7 +16,6 @@ type DBConfig struct {
 	DbName     string `env:"MYSQL_DATABASE"`
 	DbUser     string `env:"MYSQL_USER"`
 	DbPassword string `env:"MYSQL_PASSWORD"`
-	DbConn     *sql.DB
 }
 
 func Connect() error {
