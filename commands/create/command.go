@@ -32,11 +32,9 @@ func MakeCreateCommand(s *discordgo.Session, m *discordgo.MessageCreate, name st
 	// Create a character if none found in DB
 	if char == nil {
 		character := repository.Character{
-			ID:              0,
-			Name:            name,
-			Class:           "Ranger",
-			DiscordUserID:   userID,
-			DiscordServerID: 0,
+			Name:          name,
+			Class:         "Ranger",
+			DiscordUserID: userID,
 		}
 		repo.CreateACharacter(&character)
 		answer = name + " successfully created!"
