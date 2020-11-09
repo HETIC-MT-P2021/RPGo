@@ -23,6 +23,7 @@ func init() {
 	flag.Parse()
 }
 
+//DiscordConfig dto
 type DiscordConfig struct {
 	Token string `env:"TOKEN"`
 }
