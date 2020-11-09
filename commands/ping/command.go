@@ -1,6 +1,8 @@
 package ping
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"github.com/bwmarrin/discordgo"
+)
 
 type PingCommand struct {
 	Receiver *Receiver
@@ -14,6 +16,7 @@ type PingCommandPayload struct {
 }
 
 func MakePingCommand(s *discordgo.Session, m *discordgo.MessageCreate) *PingCommand {
+
 	return &PingCommand{
 		Receiver: &Receiver{},
 		Payload: &PingCommandPayload{
