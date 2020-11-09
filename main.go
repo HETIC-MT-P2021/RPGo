@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/HETIC-MT-P2021/RPGo/commands/create"
 	"github.com/HETIC-MT-P2021/RPGo/commands/ping"
 	"github.com/HETIC-MT-P2021/RPGo/database"
 	"github.com/bwmarrin/discordgo"
@@ -10,6 +11,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 )
 
@@ -17,6 +19,8 @@ import (
 var (
 	Token string
 )
+
+var discordPrefix = "&"
 
 func init() {
 	flag.StringVar(&Token, "t", "", "Bot Token")
@@ -74,18 +78,31 @@ func main() {
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Ignore all messages created by the bot itself
-	// This isn't required in this specific example but it's a good practice.
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
 	// If the message is "ping" reply with "Pong!"
-	if m.Content == "ping" {
+	if m.Content == (discordPrefix + "ping") {
 		pingCommand := ping.MakePingCommand(s, m)
 		pingCommand.Execute()
 	}
 
+	if strings.HasPrefix(m.Content, discordPrefix+"create") {
+		if len(strings.Fields(m.Content)) > 1 {
+			args := make([]string, 0)
+			for _, word := range strings.Fields(m.Content) {
+				args = append(args, word)
+			}
+
+			createCommand := create.MakeCreateCommand(s, m, args[1], m.Author.ID)
+			createCommand.Execute()
+			return
+		}
+		s.ChannelMessageSend(m.ChannelID, "No name given!")
+	}
+
 	// If the message is "pong" reply with "Ping!"
-	if m.Content == "pong" {
+	if m.Content == (discordPrefix + "pong") {
 		s.ChannelMessageSend(m.ChannelID, "Ping!")
 	}
 }
