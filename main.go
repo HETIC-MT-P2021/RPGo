@@ -98,7 +98,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			createCommand.Execute()
 			return
 		}
-		s.ChannelMessageSend(m.ChannelID, "No name given!")
+		s.ChannelMessageSend(m.ChannelID, "No name given! Try `&create {characterName}`")
 	}
 
 	// If the message is "pong" reply with "Ping!"
