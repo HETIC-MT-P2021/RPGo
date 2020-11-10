@@ -1,5 +1,12 @@
 package commands
 
+import "github.com/bwmarrin/discordgo"
+
 type Command interface {
-	execute() error
+	Execute() error
+	Payload() *CommandPayload
+}
+
+type CommandPayload interface {
+	Session() *discordgo.Session
 }
