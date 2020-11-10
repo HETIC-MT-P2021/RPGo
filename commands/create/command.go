@@ -1,6 +1,7 @@
 package create
 
 import (
+	"fmt"
 	"github.com/HETIC-MT-P2021/RPGo/database"
 	"github.com/HETIC-MT-P2021/RPGo/repository"
 	_ "github.com/HETIC-MT-P2021/RPGo/repository"
@@ -37,7 +38,7 @@ func MakeCreateCommand(s *discordgo.Session, m *discordgo.MessageCreate, name st
 			DiscordUserID: userID,
 		}
 		repo.CreateACharacter(&character)
-		answer = name + " successfully created!"
+		answer = fmt.Sprintf("%s successfully created!", name)
 	}
 
 	return &CreateCommand{
