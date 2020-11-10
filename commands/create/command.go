@@ -9,25 +9,25 @@ import (
 	"log"
 )
 
-type CreateCommand struct {
+type CharacterCreateCommand struct {
 	Receiver *Receiver
-	Payload  *CreateCommandPayload
+	payload  *CharacterCreateCommandPayload
 }
 
-type CreateCommandPayload struct {
+type CharacterCreateCommandPayload struct {
 	Answer  string
-	Session *discordgo.Session
+	session *discordgo.Session
 	Message *discordgo.MessageCreate
 }
 
-func MakeCreateCommand(s *discordgo.Session, m *discordgo.MessageCreate, name string, userID string) *CreateCommand {
+func MakeCreateCommand(s *discordgo.Session, m *discordgo.MessageCreate, name string, userID string) *CharacterCreateCommand {
 	db := database.DBCon
 	repo := repository.Repository{Conn: db}
 	answer := "You already have a character!"
 
 	char, err := repo.GetCharacterByDiscordUserID(userID)
 	if err != nil {
-		log.Printf("Couldn't get character with userID: %s, %v", userID, err)
+		log.Fatalf("Couldn't get character with userID: %s, %v", userID, err)
 	}
 
 	// Create a character if none found in DB
@@ -37,20 +37,30 @@ func MakeCreateCommand(s *discordgo.Session, m *discordgo.MessageCreate, name st
 			Class:         "Ranger",
 			DiscordUserID: userID,
 		}
-		repo.CreateACharacter(&character)
+		err := repo.CreateACharacter(&character)
+		if err != nil {
+			log.Fatalf("Couldn't create character: %v", err)
+		}
 		answer = fmt.Sprintf("%s successfully created!", name)
 	}
 
-	return &CreateCommand{
+	return &CharacterCreateCommand{
 		Receiver: &Receiver{},
-		Payload: &CreateCommandPayload{
+		payload: &CharacterCreateCommandPayload{
 			Answer:  answer,
-			Session: s,
+			session: s,
 			Message: m,
 		},
 	}
 }
 
-func (c *CreateCommand) Execute() {
-	c.Receiver.Answer(c.Payload)
+func (c *CharacterCreateCommand) Execute() {
+	c.Receiver.Answer(c.Payload())
+}
+func (c *CharacterCreateCommand) Payload() *CharacterCreateCommandPayload {
+	return c.payload
+}
+
+func (p *CharacterCreateCommandPayload) Session() *discordgo.Session {
+	return p.session
 }
