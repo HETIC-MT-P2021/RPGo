@@ -14,9 +14,11 @@ func TestMakeCreateCommand(t *testing.T) {
 	db := database.DBCon
 	repo := repository.Repository{Conn: db}
 
-	char, err := repo.GetCharacterByDiscordUserID(string("1"))
+	userId := "1"
+
+	char, err := repo.GetCharacterByDiscordUserID("1")
 	if err != nil {
-		log.Fatalf("Couldn't get character with userID: %s, %v", "1", err)
+		log.Fatalf("Couldn't get character with userID: %s, %v", userId, err)
 	}
 
 	character := repository.Character{}
@@ -26,7 +28,7 @@ func TestMakeCreateCommand(t *testing.T) {
 		character := repository.Character{
 			Name:          "Tynyndil",
 			Class:         "Ranger",
-			DiscordUserID: "1",
+			DiscordUserID: userId,
 		}
 		err := repo.CreateACharacter(&character)
 		if err != nil {
