@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/HETIC-MT-P2021/RPGo/database"
 	"github.com/HETIC-MT-P2021/RPGo/repository"
-	_ "github.com/HETIC-MT-P2021/RPGo/repository"
 	"github.com/bwmarrin/discordgo"
 	"log"
 )
