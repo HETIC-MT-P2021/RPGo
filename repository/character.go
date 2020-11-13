@@ -11,7 +11,7 @@ func (repository *CharacterRepository) GetCharacterByDiscordUserID(discordUserID
 		pc.class, 
 		pc.discord_user_id 
 		FROM p_character pc 
-		WHERE pc.discord_user_id=(?)`, discordUserID)
+		WHERE pc.discord_user_id = ?`, discordUserID)
 	char := Character{}
 	switch err := row.Scan(&char.ID, &char.Name, &char.Class, &char.DiscordUserID); err {
 	case sql.ErrNoRows:
