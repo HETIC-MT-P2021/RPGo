@@ -40,7 +40,7 @@ func TestCharCommandGenerator_Create_UserDoesNotExist(t *testing.T) {
 		ID:        "428",
 		ChannelID: "43",
 		GuildID:   "",
-		Content:   "j'adore les patates, topinambour",
+		Content:   "Test content",
 	}
 
 	messageCreate := discordgo.MessageCreate{Message: &message}
@@ -71,7 +71,7 @@ func TestCharCommandGenerator_Create_UserExists(t *testing.T) {
 		ID:        "428",
 		ChannelID: "43",
 		GuildID:   "",
-		Content:   "j'adore les patates, topinambour",
+		Content:   "Test content",
 	}
 
 	messageCreate := discordgo.MessageCreate{Message: &message}
