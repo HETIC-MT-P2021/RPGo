@@ -2,7 +2,6 @@ package create
 
 import (
 	"fmt"
-	"github.com/HETIC-MT-P2021/RPGo/database"
 	"github.com/HETIC-MT-P2021/RPGo/repository"
 	"github.com/bwmarrin/discordgo"
 	"log"
@@ -19,12 +18,15 @@ type CharacterCreateCommandPayload struct {
 	Message *discordgo.MessageCreate
 }
 
-func MakeCreateCommand(s *discordgo.Session, m *discordgo.MessageCreate, name string, userID string) *CharacterCreateCommand {
-	db := database.DBCon
-	repo := repository.Repository{Conn: db}
+type CharCommandGenerator struct {
+	Repo repository.CharacterRepository
+}
+
+func (command *CharCommandGenerator) Create(s *discordgo.Session, m *discordgo.MessageCreate,
+	name string, userID string) *CharacterCreateCommand {
 	answer := "You already have a character!"
 
-	char, err := repo.GetCharacterByDiscordUserID(userID)
+	char, err := command.Repo.GetCharacterByDiscordUserID(userID)
 	if err != nil {
 		log.Fatalf("Couldn't get character with userID: %s, %v", userID, err)
 	}
@@ -36,7 +38,7 @@ func MakeCreateCommand(s *discordgo.Session, m *discordgo.MessageCreate, name st
 			Class:         "Ranger",
 			DiscordUserID: userID,
 		}
-		err := repo.CreateACharacter(&character)
+		err := command.Repo.Create(&character)
 		if err != nil {
 			log.Fatalf("Couldn't create character: %v", err)
 		}
