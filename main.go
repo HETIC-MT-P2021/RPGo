@@ -97,6 +97,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			createCommand, err := commandGenerator.CreateCommand(s, m, args[1], m.Author.ID)
 			if err != nil {
+				log.Println(err)
 				helpers.SendGenericErrorMessage(s, m.ChannelID)
 				return
 			}
