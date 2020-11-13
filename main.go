@@ -100,7 +100,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 					Conn: database.DBCon,
 				}}
 
-			createCommand := commandGenerator.Create(s, m, args[1], m.Author.ID)
+			//@toDO DEAL WITH ERROR
+			createCommand, _ := commandGenerator.Create(s, m, args[1], m.Author.ID)
 			createCommand.Execute()
 
 			return
