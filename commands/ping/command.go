@@ -4,22 +4,25 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-type PingCommand struct {
+//Command model for Ping Command
+type Command struct {
 	Receiver *Receiver
-	payload  *PingCommandPayload
+	payload  *CommandPayload
 }
 
-type PingCommandPayload struct {
+//CommandPayload information on Ping Command
+type CommandPayload struct {
 	Answer  string
 	session *discordgo.Session
 	Message *discordgo.MessageCreate
 }
 
-func MakePingCommand(s *discordgo.Session, m *discordgo.MessageCreate) *PingCommand {
+//MakePingCommand makes a ping command
+func MakePingCommand(s *discordgo.Session, m *discordgo.MessageCreate) *Command {
 
-	return &PingCommand{
+	return &Command{
 		Receiver: &Receiver{},
-		payload: &PingCommandPayload{
+		payload: &CommandPayload{
 			Answer:  "Pong!",
 			session: s,
 			Message: m,
@@ -27,14 +30,17 @@ func MakePingCommand(s *discordgo.Session, m *discordgo.MessageCreate) *PingComm
 	}
 }
 
-func (c *PingCommand) Execute() {
+//Execute command with all its information
+func (c *Command) Execute() {
 	c.Receiver.Answer(c.Payload())
 }
 
-func (c *PingCommand) Payload() *PingCommandPayload {
+//Payload returns PingCommand payload
+func (c *Command) Payload() *CommandPayload {
 	return c.payload
 }
 
-func (p *PingCommandPayload) Session() *discordgo.Session {
+//Session returns PingCommandPayload discord session
+func (p *CommandPayload) Session() *discordgo.Session {
 	return p.session
 }

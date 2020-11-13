@@ -7,21 +7,25 @@ import (
 	"log"
 )
 
+//CharacterCreateCommand model for character creation command
 type CharacterCreateCommand struct {
 	Receiver *Receiver
 	payload  *CharacterCreateCommandPayload
 }
 
+//CharacterCreateCommandPayload model for information on character creation command
 type CharacterCreateCommandPayload struct {
 	Answer  string
 	session *discordgo.Session
 	Message *discordgo.MessageCreate
 }
 
+//CharCommandGenerator stores the repository.CharacterRepository DTO
 type CharCommandGenerator struct {
 	Repo repository.CharacterRepository
 }
 
+//Create a character creation command
 func (command *CharCommandGenerator) Create(s *discordgo.Session, m *discordgo.MessageCreate,
 	name string, userID string) *CharacterCreateCommand {
 	answer := "You already have a character!"
@@ -55,13 +59,17 @@ func (command *CharCommandGenerator) Create(s *discordgo.Session, m *discordgo.M
 	}
 }
 
+//Execute command with all its information
 func (c *CharacterCreateCommand) Execute() {
 	c.Receiver.Answer(c.Payload())
 }
+
+//Payload returns CharacterCreateCommand payload
 func (c *CharacterCreateCommand) Payload() *CharacterCreateCommandPayload {
 	return c.payload
 }
 
+//Session returns CharacterCreateCommand session
 func (p *CharacterCreateCommandPayload) Session() *discordgo.Session {
 	return p.session
 }
