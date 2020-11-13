@@ -22,7 +22,7 @@ type CharacterCreateCommandPayload struct {
 
 //CharCommandGenerator stores the repository.CharacterRepository DTO
 type CharCommandGenerator struct {
-	Repo repository.CharacterRepository
+	Repo repository.CharacterRepositoryInterface
 }
 
 //Create a character creation command

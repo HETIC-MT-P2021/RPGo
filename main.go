@@ -95,9 +95,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				args = append(args, word)
 			}
 
-			commandGenerator := create.CharCommandGenerator{Repo: repository.CharacterRepository{
-				Conn: database.DBCon,
-			}}
+			commandGenerator := create.CharCommandGenerator{
+				Repo: &repository.CharacterRepository{
+					Conn: database.DBCon,
+				}}
 
 			createCommand := commandGenerator.Create(s, m, args[1], m.Author.ID)
 			createCommand.Execute()

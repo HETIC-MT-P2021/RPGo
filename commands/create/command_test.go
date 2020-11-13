@@ -24,4 +24,12 @@ func TestCharCommandGenerator_Create(t *testing.T) {
 		return nil, nil
 	}).MaxTimes(1)
 
+	m.EXPECT().Create(char).DoAndReturn(func(character *repository.Character) error {
+		return nil
+	}).MaxTimes(1)
+
+	//generator := CharCommandGenerator{Repo: m}
+	//
+	//generator.Create() //@toDo : se demerder pour mocker la session
+
 }
