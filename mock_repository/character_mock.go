@@ -36,7 +36,7 @@ func (m *MockCharacterRepositoryInterface) EXPECT() *MockCharacterRepositoryInte
 // Create mocks base method
 func (m *MockCharacterRepositoryInterface) Create(character *repository.Character) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", character)
+	ret := m.ctrl.Call(m, "CreateCommand", character)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
@@ -44,7 +44,7 @@ func (m *MockCharacterRepositoryInterface) Create(character *repository.Characte
 // Create indicates an expected call of Create
 func (mr *MockCharacterRepositoryInterfaceMockRecorder) Create(character interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockCharacterRepositoryInterface)(nil).Create), character)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCommand", reflect.TypeOf((*MockCharacterRepositoryInterface)(nil).Create), character)
 }
 
 // GetCharacterByDiscordUserID mocks base method

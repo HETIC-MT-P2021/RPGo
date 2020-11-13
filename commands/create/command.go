@@ -3,14 +3,9 @@ package create
 import (
 	"fmt"
 	"github.com/HETIC-MT-P2021/RPGo/commands"
+	"github.com/HETIC-MT-P2021/RPGo/helpers"
 	"github.com/HETIC-MT-P2021/RPGo/repository"
 	"github.com/bwmarrin/discordgo"
-)
-
-// Messages sent to discord API
-const (
-	CharAlreadyExists       = "You already have a character!"
-	CharSuccessfullyCreated = "%s successfully created!"
 )
 
 //CharacterCreateCommand model for character creation command
@@ -31,17 +26,17 @@ type CharCommandGenerator struct {
 	Repo repository.CharacterRepositoryInterface
 }
 
-//Create a character creation command
-func (command *CharCommandGenerator) Create(c commands.DiscordConnector, m *discordgo.MessageCreate,
+//CreateCommand a character creation command
+func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnector, m *discordgo.MessageCreate,
 	name string, userID string) (*CharacterCreateCommand, error) {
 
-	answer := CharAlreadyExists
+	answer := helpers.CharAlreadyExists
 	char, err := command.Repo.GetCharacterByDiscordUserID(userID)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't get character with userID: %s, %v", userID, err)
 	}
 
-	// Create a character if none found in DB
+	// CreateCommand a character if none found in DB
 	if char == nil {
 		character := repository.Character{
 			Name:          name,
@@ -52,7 +47,7 @@ func (command *CharCommandGenerator) Create(c commands.DiscordConnector, m *disc
 		if err != nil {
 			return nil, fmt.Errorf("couldn't create character: %v", err)
 		}
-		answer = fmt.Sprintf(CharSuccessfullyCreated, name)
+		answer = fmt.Sprintf(helpers.CharSuccessfullyCreated, name)
 	}
 
 	return &CharacterCreateCommand{
