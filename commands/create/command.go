@@ -25,7 +25,7 @@ type CharCommandGenerator struct {
 func (command *CharCommandGenerator) Create(s *discordgo.Session, m *discordgo.MessageCreate,
 	name string, userID string) *CharacterCreateCommand {
 	answer := "You already have a character!"
-
+	
 	char, err := command.Repo.GetCharacterByDiscordUserID(userID)
 	if err != nil {
 		log.Fatalf("Couldn't get character with userID: %s, %v", userID, err)

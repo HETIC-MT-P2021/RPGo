@@ -3,7 +3,7 @@ package repository
 import "database/sql"
 
 //GetCharacterByDiscordUserID get a character by its discord user id (unique)
-func (repository *Repository) GetCharacterByDiscordUserID(discordUserID string) (*Character, error) {
+func (repository *CharacterRepository) GetCharacterByDiscordUserID(discordUserID string) (*Character, error) {
 	row := repository.Conn.QueryRow("SELECT pc.id, pc.name, pc.class, pc.discord_user_id "+
 		"FROM p_character pc WHERE pc.discord_user_id=(?)", discordUserID)
 	var id int64
@@ -23,10 +23,9 @@ func (repository *Repository) GetCharacterByDiscordUserID(discordUserID string) 
 	}
 }
 
-//CreateACharacter saves a character in db
-func (repository *Repository) CreateACharacter(character *Character) error {
-	stmt, err := repository.Conn.Prepare(`INSERT INTO p_character(name, class, 
-discord_user_id) VALUES(?,?,?)`)
+//Create saves a character in db
+func (repository *CharacterRepository) Create(character *Character) error {
+	stmt, err := repository.Conn.Prepare("INSERT INTO p_character (name, class, discord_user_id) VALUES (?,?,?)")
 	if err != nil {
 		return err
 	}

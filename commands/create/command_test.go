@@ -24,4 +24,5 @@ func TestCharCommandGenerator_Create(t *testing.T) {
 		return nil, nil
 	}).MaxTimes(1)
 
+	
 }
