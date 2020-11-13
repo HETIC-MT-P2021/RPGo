@@ -2,6 +2,7 @@ package create
 
 import (
 	"fmt"
+	"github.com/HETIC-MT-P2021/RPGo/helpers"
 	"github.com/HETIC-MT-P2021/RPGo/mock_commands"
 	"github.com/HETIC-MT-P2021/RPGo/mock_repository"
 	"github.com/HETIC-MT-P2021/RPGo/repository"
@@ -46,9 +47,10 @@ func TestCharCommandGenerator_Create_UserDoesNotExist(t *testing.T) {
 
 	generator := CharCommandGenerator{Repo: m}
 
-	charCreateCommand, err := generator.Create(s, &messageCreate, "TestChar", "1234")
+	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "1234")
 	require.NoError(t, err, "should create char command")
-	assert.Equal(t, fmt.Sprintf(CharSuccessfullyCreated, char.Name), charCreateCommand.payload.Answer)
+	assert.Equal(t, fmt.Sprintf(helpers.CharSuccessfullyCreated, char.Name),
+		charCreateCommand.payload.Answer)
 
 }
 
@@ -76,7 +78,7 @@ func TestCharCommandGenerator_Create_UserExists(t *testing.T) {
 
 	generator := CharCommandGenerator{Repo: m}
 
-	charCreateCommand, err := generator.Create(s, &messageCreate, "TestChar", "1234")
+	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "1234")
 	require.NoError(t, err, "should create char command")
-	assert.Equal(t, CharAlreadyExists, charCreateCommand.payload.Answer)
+	assert.Equal(t, helpers.CharAlreadyExists, charCreateCommand.payload.Answer)
 }
