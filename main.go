@@ -6,6 +6,7 @@ import (
 	"github.com/HETIC-MT-P2021/RPGo/commands/create"
 	"github.com/HETIC-MT-P2021/RPGo/commands/ping"
 	"github.com/HETIC-MT-P2021/RPGo/database"
+	"github.com/HETIC-MT-P2021/RPGo/repository"
 	"github.com/bwmarrin/discordgo"
 	"github.com/caarlos0/env/v6"
 	"log"
@@ -94,8 +95,13 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				args = append(args, word)
 			}
 
-			createCommand := create.MakeCreateCommand(s, m, args[1], m.Author.ID)
+			commandGenerator := create.CharCommandGenerator{Repo: repository.CharacterRepository{
+				Conn: database.DBCon,
+			}}
+
+			createCommand := commandGenerator.Create(s, m, args[1], m.Author.ID)
 			createCommand.Execute()
+
 			return
 		}
 		s.ChannelMessageSend(m.ChannelID, "No name given! Try `&create {characterName}`")
