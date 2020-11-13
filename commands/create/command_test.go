@@ -1,50 +1,27 @@
 package create
 
 import (
-	"github.com/HETIC-MT-P2021/RPGo/database"
+	"github.com/HETIC-MT-P2021/RPGo/mock_repository"
 	"github.com/HETIC-MT-P2021/RPGo/repository"
-	. "github.com/onsi/gomega"
-	"log"
+	"github.com/golang/mock/gomock"
 	"testing"
 )
 
-func TestMakeCreateCommand(t *testing.T) {
-	g := NewGomegaWithT(t)
-
-	db := database.DBCon
-	repo := repository.Repository{Conn: db}
-
-	userId := "1"
-
-	char, err := repo.GetCharacterByDiscordUserID("1")
-	if err != nil {
-		log.Fatalf("Couldn't get character with userID: %s, %v", userId, err)
-	}
-
-	character := repository.Character{}
-
-	// Create a character if none found in DB
-	if char == nil {
-		character := repository.Character{
-			Name:          "Tynyndil",
-			Class:         "Ranger",
-			DiscordUserID: userId,
-		}
-		err := repo.CreateACharacter(&character)
-		if err != nil {
-			log.Fatalf("Couldn't create character: %v", err)
-		}
-	}
-
-	g.Expect(character).ShouldNot(BeNil(), "Character should have been created")
-
-	char, err = repo.GetCharacterByDiscordUserID(string("1"))
-
-	if err != nil {
-		log.Fatalf("Couldn't get character with userID: %s, %v", "1", err)
-	}
-
-	g.Expect(char).ShouldNot(BeNil(), "User can no longer create a character")
-
+var char = &repository.Character{
+	Name:          "TestChar",
+	Class:         "Ranger",
+	DiscordUserID: "1234",
 }
 
+func TestCharCommandGenerator_Create(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	m := mock_repository.NewMockCharacterRepositoryInterface(ctrl)
+
+	m.EXPECT().GetCharacterByDiscordUserID(char.DiscordUserID).DoAndReturn(func() (*repository.
+		Character, error) {
+		return nil, nil
+	}).MaxTimes(1)
+
+}
