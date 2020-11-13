@@ -1,9 +1,14 @@
 package create
 
 import (
+	"fmt"
+	"github.com/HETIC-MT-P2021/RPGo/mock_commands"
 	"github.com/HETIC-MT-P2021/RPGo/mock_repository"
 	"github.com/HETIC-MT-P2021/RPGo/repository"
+	"github.com/bwmarrin/discordgo"
 	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"testing"
 )
 
@@ -13,13 +18,13 @@ var char = &repository.Character{
 	DiscordUserID: "1234",
 }
 
-func TestCharCommandGenerator_Create(t *testing.T) {
+func TestCharCommandGenerator_Create_UserDoesNotExist(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	m := mock_repository.NewMockCharacterRepositoryInterface(ctrl)
 
-	m.EXPECT().GetCharacterByDiscordUserID(char.DiscordUserID).DoAndReturn(func() (*repository.
+	m.EXPECT().GetCharacterByDiscordUserID(char.DiscordUserID).DoAndReturn(func(_ string) (*repository.
 		Character, error) {
 		return nil, nil
 	}).MaxTimes(1)
@@ -28,8 +33,50 @@ func TestCharCommandGenerator_Create(t *testing.T) {
 		return nil
 	}).MaxTimes(1)
 
-	//generator := CharCommandGenerator{Repo: m}
-	//
-	//generator.Create() //@toDo : se demerder pour mocker la session
+	s := mock_commands.NewMockDiscordConnector(ctrl)
 
+	message := discordgo.Message{
+		ID:        "428",
+		ChannelID: "43",
+		GuildID:   "",
+		Content:   "j'adore les patates, topinambour",
+	}
+
+	messageCreate := discordgo.MessageCreate{Message: &message}
+
+	generator := CharCommandGenerator{Repo: m}
+
+	charCreateCommand, err := generator.Create(s, &messageCreate, "TestChar", "1234")
+	require.NoError(t, err, "should create char command")
+	assert.Equal(t, fmt.Sprintf(CharSuccessfullyCreated, char.Name), charCreateCommand.payload.Answer)
+
+}
+
+func TestCharCommandGenerator_Create_UserExists(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	m := mock_repository.NewMockCharacterRepositoryInterface(ctrl)
+
+	m.EXPECT().GetCharacterByDiscordUserID(char.DiscordUserID).DoAndReturn(func(_ string) (*repository.
+		Character, error) {
+		return char, nil
+	}).MaxTimes(1)
+
+	s := mock_commands.NewMockDiscordConnector(ctrl)
+
+	message := discordgo.Message{
+		ID:        "428",
+		ChannelID: "43",
+		GuildID:   "",
+		Content:   "j'adore les patates, topinambour",
+	}
+
+	messageCreate := discordgo.MessageCreate{Message: &message}
+
+	generator := CharCommandGenerator{Repo: m}
+
+	charCreateCommand, err := generator.Create(s, &messageCreate, "TestChar", "1234")
+	require.NoError(t, err, "should create char command")
+	assert.Equal(t, CharAlreadyExists, charCreateCommand.payload.Answer)
 }
