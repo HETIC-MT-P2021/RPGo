@@ -28,7 +28,7 @@ type CharCommandGenerator struct {
 
 //CreateCommand a character creation command
 func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnector, m *discordgo.MessageCreate,
-	name string, userID string) (*CharacterCreateCommand, error) {
+	name string, class repository.Class, userID string) (*CharacterCreateCommand, error) {
 
 	answer := helpers.CharAlreadyExists
 	char, err := command.Repo.GetCharacterByDiscordUserID(userID)
@@ -36,11 +36,13 @@ func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnector, 
 		return nil, fmt.Errorf("couldn't get character with userID: %s, %v", userID, err)
 	}
 
+	answer = helpers.WrongClassGiven
+
 	// CreateCommand a character if none found in DB
-	if char == nil {
+	if char == nil && class.IsValid() {
 		character := repository.Character{
 			Name:          name,
-			Class:         "Ranger",
+			Class:         class,
 			DiscordUserID: userID,
 		}
 		err := command.Repo.Create(&character)
