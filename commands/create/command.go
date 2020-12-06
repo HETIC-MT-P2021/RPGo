@@ -36,8 +36,6 @@ func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnector, 
 		return nil, fmt.Errorf("couldn't get character with userID: %s, %v", userID, err)
 	}
 
-	answer = helpers.WrongClassGiven
-
 	// CreateCommand a character if none found in DB
 	if char == nil && class.IsValid() {
 		character := repository.Character{
@@ -50,6 +48,10 @@ func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnector, 
 			return nil, fmt.Errorf("couldn't create character: %v", err)
 		}
 		answer = fmt.Sprintf(helpers.CharSuccessfullyCreated, name)
+	}
+
+	if !class.IsValid() && char == nil {
+		answer = helpers.WrongClassGiven
 	}
 
 	return &CharacterCreateCommand{
