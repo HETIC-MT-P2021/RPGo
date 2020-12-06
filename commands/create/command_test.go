@@ -2,9 +2,8 @@ package create
 
 import (
 	"fmt"
+	"github.com/HETIC-MT-P2021/RPGo/commands"
 	"github.com/HETIC-MT-P2021/RPGo/helpers"
-	"github.com/HETIC-MT-P2021/RPGo/mock_commands"
-	"github.com/HETIC-MT-P2021/RPGo/mock_repository"
 	"github.com/HETIC-MT-P2021/RPGo/repository"
 	"github.com/bwmarrin/discordgo"
 	"github.com/golang/mock/gomock"
@@ -23,7 +22,7 @@ func TestCharCommandGenerator_Create_UserDoesNotExist(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	m := mock_repository.NewMockCharacterRepositoryInterface(ctrl)
+	m := repository.NewMockCharacterRepositoryInterface(ctrl)
 
 	m.EXPECT().GetCharacterByDiscordUserID(char.DiscordUserID).DoAndReturn(func(_ string) (*repository.
 		Character, error) {
@@ -34,7 +33,7 @@ func TestCharCommandGenerator_Create_UserDoesNotExist(t *testing.T) {
 		return nil
 	}).MaxTimes(1)
 
-	s := mock_commands.NewMockDiscordConnector(ctrl)
+	s := commands.NewMockDiscordConnector(ctrl)
 
 	message := discordgo.Message{
 		ID:        "428",
@@ -58,14 +57,14 @@ func TestCharCommandGenerator_Create_UserExists(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	m := mock_repository.NewMockCharacterRepositoryInterface(ctrl)
+	m := repository.NewMockCharacterRepositoryInterface(ctrl)
 
 	m.EXPECT().GetCharacterByDiscordUserID(char.DiscordUserID).DoAndReturn(func(_ string) (*repository.
 		Character, error) {
 		return char, nil
 	}).MaxTimes(1)
 
-	s := mock_commands.NewMockDiscordConnector(ctrl)
+	s := commands.NewMockDiscordConnector(ctrl)
 
 	message := discordgo.Message{
 		ID:        "428",
