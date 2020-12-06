@@ -32,8 +32,7 @@ func Connect() error {
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		fmt.Errorf("could not open database: %v", err)
-		return err
+		return fmt.Errorf("could not open database: %v", err)
 	}
 
 	var dbErr error
