@@ -84,12 +84,21 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				args = append(args, word)
 			}
 
+			if len(args) != 3 {
+				_, err := s.ChannelMessageSend(m.ChannelID, "This command requires 2 arguments ! Try `&create {characterName} {characterClass}`")
+				if err != nil {
+					helpers.SendGenericErrorMessage(s, m.ChannelID)
+					return
+				}
+				return
+			}
+
 			commandGenerator := create.CharCommandGenerator{
 				Repo: &repository.CharacterRepository{
 					Conn: database.DBCon,
 				}}
 
-			createCommand, err := commandGenerator.CreateCommand(s, m, args[1], m.Author.ID)
+			createCommand, err := commandGenerator.CreateCommand(s, m, args[1], repository.Class(args[2]), m.Author.ID)
 			if err != nil {
 				log.Println(err)
 				helpers.SendGenericErrorMessage(s, m.ChannelID)
@@ -99,7 +108,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			return
 		}
-		_, err := s.ChannelMessageSend(m.ChannelID, "No name given! Try `&create {characterName}`")
+
+		_, err := s.ChannelMessageSend(m.ChannelID, "No name given! Try `&create {characterName} {characterClass}`")
 		if err != nil {
 			helpers.SendGenericErrorMessage(s, m.ChannelID)
 			return

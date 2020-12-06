@@ -6,7 +6,8 @@ import "github.com/HETIC-MT-P2021/RPGo/commands"
 const (
 	CharAlreadyExists       = "You already have a character!"
 	CharSuccessfullyCreated = "%s successfully created!"
-	GenericUserError        = "An issue occured, please try again later."
+	WrongClassGiven         = "You have to choose an existing class!"
+	GenericUserError        = "An issue occurred, please try again later."
 )
 
 //SendGenericErrorMessage sends an error message to end user
