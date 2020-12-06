@@ -10,8 +10,7 @@ For any information about the project environment and how to install the project
 
 ## Testing
 
-This project contains a strict commit convention, and a CI which will test the quality of your code. Please refer to it if you want to run unit test or a linter before submitting your changes, as it
- will not be accepted if not made.
+This project contains a strict commit convention, and a CI which will test the quality of your code. Please refer to it if you want to run unit test or a linter before submitting your changes, as it will not be accepted if not made.
 
 ## How to submit changes 
 
@@ -23,11 +22,12 @@ To submit changes you need to create a branch from develop where you will be abl
 ### Name of the branch
 
 Your branch must be create from develop using the following syntax :
-If it’s a new feature : 
+
+* If it’s a new feature : 
 
 ** ft/name-of-the-feature **
 
-If it’s a bug fix :
+* If it’s a bug fix :
 
 ** fx/name-of-the-fix **
 
