@@ -15,8 +15,7 @@ This project contains a strict commit convention, and a CI which will test the q
 
 ## How to submit changes 
 
-To submit changes you need to create a branch from develop where you will be able to work on your feature or fix. When you’re done, you will have to create a pull request. Once reviewed, your
- branch may be merged in develop. See the **[PR and commit standards](#pr-and-commit-standards)** as well to keep the git clean 😉 
+To submit changes you need to create a branch from develop where you will be able to work on your feature or fix. When you’re done, you will have to create a pull request. Once reviewed, your branch may be merged in develop. See the **[PR and commit standards](#pr-and-commit-standards)** as well to keep the git clean 😉 
 
 
 ## PR and commit standards
