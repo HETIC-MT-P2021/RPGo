@@ -14,7 +14,7 @@ import (
 
 var char = &repository.Character{
 	Name:          "TestChar",
-	Class:         "Ranger",
+	Class:         "rogue",
 	DiscordUserID: "1234",
 }
 
@@ -46,7 +46,7 @@ func TestCharCommandGenerator_Create_UserDoesNotExist(t *testing.T) {
 
 	generator := CharCommandGenerator{Repo: m}
 
-	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "1234")
+	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "rogue", "1234")
 	require.NoError(t, err, "should create char command")
 	assert.Equal(t, fmt.Sprintf(helpers.CharSuccessfullyCreated, char.Name),
 		charCreateCommand.payload.Answer)
@@ -77,7 +77,36 @@ func TestCharCommandGenerator_Create_UserExists(t *testing.T) {
 
 	generator := CharCommandGenerator{Repo: m}
 
-	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "1234")
+	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "rogue", "1234")
 	require.NoError(t, err, "should create char command")
 	assert.Equal(t, helpers.CharAlreadyExists, charCreateCommand.payload.Answer)
+}
+
+func TestCharCommandGenerator_Create_WrongClassGiven(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	m := repository.NewMockCharacterRepositoryInterface(ctrl)
+
+	m.EXPECT().GetCharacterByDiscordUserID(char.DiscordUserID).DoAndReturn(func(_ string) (*repository.
+		Character, error) {
+		return nil, nil
+	}).MaxTimes(1)
+
+	s := commands.NewMockDiscordConnector(ctrl)
+
+	message := discordgo.Message{
+		ID:        "428",
+		ChannelID: "43",
+		GuildID:   "",
+		Content:   "Test content",
+	}
+
+	messageCreate := discordgo.MessageCreate{Message: &message}
+
+	generator := CharCommandGenerator{Repo: m}
+
+	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "wrong", "1234")
+	require.NoError(t, err, "should create char command")
+	assert.Equal(t, helpers.WrongClassGiven, charCreateCommand.payload.Answer)
 }
