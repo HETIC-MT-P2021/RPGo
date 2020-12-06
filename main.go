@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/HETIC-MT-P2021/RPGo/commands/create"
-	"github.com/HETIC-MT-P2021/RPGo/commands/ping"
 	"github.com/HETIC-MT-P2021/RPGo/database"
 	customenv "github.com/HETIC-MT-P2021/RPGo/env"
 	"github.com/HETIC-MT-P2021/RPGo/helpers"
@@ -77,11 +76,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
-	// If the message is "ping" reply with "Pong!"
-	if m.Content == (customenv.DiscordPrefix + "ping") {
-		pingCommand := ping.MakePingCommand(s, m)
-		pingCommand.Execute()
-	}
 
 	if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"create") {
 		if len(strings.Fields(m.Content)) > 1 {
@@ -106,15 +100,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 		_, err := s.ChannelMessageSend(m.ChannelID, "No name given! Try `&create {characterName}`")
-		if err != nil {
-			helpers.SendGenericErrorMessage(s, m.ChannelID)
-			return
-		}
-	}
-
-	// If the message is "pong" reply with "Ping!"
-	if m.Content == (customenv.DiscordPrefix + "pong") {
-		_, err := s.ChannelMessageSend(m.ChannelID, "Ping!")
 		if err != nil {
 			helpers.SendGenericErrorMessage(s, m.ChannelID)
 			return
