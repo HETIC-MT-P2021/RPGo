@@ -17,7 +17,7 @@ type CharacterCreateCommand struct {
 //CharacterCreateCommandPayload model for information on character creation command
 type CharacterCreateCommandPayload struct {
 	Answer  string
-	session commands.DiscordConnector
+	session commands.DiscordConnectorMessage
 	Message *discordgo.MessageCreate
 }
 
@@ -27,7 +27,7 @@ type CharCommandGenerator struct {
 }
 
 //CreateCommand a character creation command
-func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnector, m *discordgo.MessageCreate,
+func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnectorMessage, m *discordgo.MessageCreate,
 	name string, class commands.Class, userID string) (*CharacterCreateCommand, error) {
 
 	char, err := command.Repo.GetCharacterByDiscordUserID(userID)
@@ -91,6 +91,6 @@ func (c *CharacterCreateCommand) Payload() *CharacterCreateCommandPayload {
 }
 
 //Session returns CharacterCreateCommand session
-func (p *CharacterCreateCommandPayload) Session() commands.DiscordConnector {
+func (p *CharacterCreateCommandPayload) Session() commands.DiscordConnectorMessage {
 	return p.session
 }

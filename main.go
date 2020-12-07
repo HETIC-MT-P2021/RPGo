@@ -6,6 +6,7 @@ import (
 	"github.com/HETIC-MT-P2021/RPGo/commands"
 	"github.com/HETIC-MT-P2021/RPGo/commands/create"
 	"github.com/HETIC-MT-P2021/RPGo/commands/presentation"
+	"github.com/HETIC-MT-P2021/RPGo/commands/help"
 	"github.com/HETIC-MT-P2021/RPGo/database"
 	customenv "github.com/HETIC-MT-P2021/RPGo/env"
 	"github.com/HETIC-MT-P2021/RPGo/helpers"
@@ -85,39 +86,38 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"create") {
-		if len(strings.Fields(m.Content)) > 1 {
-			args := make([]string, 0)
-			for _, word := range strings.Fields(m.Content) {
-				args = append(args, word)
-			}
+		messageCreateCharacter(s, m)
+	}
 
-			if len(args) != 3 {
-				_, err := s.ChannelMessageSend(m.ChannelID, "This command requires 2 arguments ! Try `&create {characterName} {characterClass}`")
-				if err != nil {
-					helpers.SendGenericErrorMessage(s, m.ChannelID)
-					return
-				}
-				return
-			}
+	if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"help") {
+		messageHelp(s, m)
+	}
+}
 
-			commandGenerator := create.CharCommandGenerator{
-				Repo: &repository.CharacterRepository{
-					Conn: database.DBCon,
-				}}
+func messageCreateCharacter(s *discordgo.Session, m *discordgo.MessageCreate) {
+	if len(strings.Fields(m.Content)) > 1 {
+		args := make([]string, 0)
+		for _, word := range strings.Fields(m.Content) {
+			args = append(args, word)
+		}
 
-			createCommand, err := commandGenerator.CreateCommand(s, m, args[1], commands.Class(args[2]), m.Author.ID)
+		if len(args) != 3 {
+			_, err := s.ChannelMessageSend(m.ChannelID, "This command requires 2 arguments ! Try `&create {characterName} {characterClass}`")
 			if err != nil {
-				log.Println(err)
 				helpers.SendGenericErrorMessage(s, m.ChannelID)
 				return
 			}
-			createCommand.Execute()
-
 			return
 		}
 
-		_, err := s.ChannelMessageSend(m.ChannelID, "No name given! Try `&create {characterName} {characterClass}`")
+		commandGenerator := create.CharCommandGenerator{
+			Repo: &repository.CharacterRepository{
+				Conn: database.DBCon,
+			}}
+
+		_, err := commandGenerator.CreateCommand(s, m, args[1], commands.Class(args[2]), m.Author.ID)
 		if err != nil {
+			log.Println(err)
 			helpers.SendGenericErrorMessage(s, m.ChannelID)
 			return
 		} else if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"presentation") {
@@ -152,4 +152,20 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		return
 	}
+
+	_, err := s.ChannelMessageSend(m.ChannelID, "No name given! Try `&create {characterName} {characterClass}`")
+	if err != nil {
+		helpers.SendGenericErrorMessage(s, m.ChannelID)
+		return
+	}
+}
+
+func messageHelp(s *discordgo.Session, m *discordgo.MessageCreate) {
+	if len(strings.Fields(m.Content)) > 1 {
+		helpers.SendGenericErrorEmbedMessage(s, m.ChannelID)
+		return
+	}
+
+	helpCommand := help.MakeCommand(s, m)
+	helpCommand.Execute()
 }

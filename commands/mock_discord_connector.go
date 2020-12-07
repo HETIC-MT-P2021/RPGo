@@ -10,7 +10,7 @@ import (
 	reflect "reflect"
 )
 
-// MockDiscordConnector is a mock of DiscordConnector interface
+// MockDiscordConnector is a mock of DiscordConnectorMessage interface
 type MockDiscordConnector struct {
 	ctrl     *gomock.Controller
 	recorder *MockDiscordConnectorMockRecorder
