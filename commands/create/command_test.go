@@ -50,7 +50,7 @@ func TestCharCommandGenerator_Create_UserDoesNotExist(t *testing.T) {
 	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "rogue", "1234")
 	require.NoError(t, err, "should create char command")
 	assert.Equal(t, fmt.Sprintf(helpers.CharSuccessfullyCreated, char.Name),
-		charCreateCommand.Payload.Answer)
+		charCreateCommand.Payload().Answer)
 
 }
 
@@ -80,7 +80,7 @@ func TestCharCommandGenerator_Create_UserExists(t *testing.T) {
 
 	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "rogue", "1234")
 	require.NoError(t, err, "should create char command")
-	assert.Equal(t, helpers.CharAlreadyExists, charCreateCommand.Payload.Answer)
+	assert.Equal(t, helpers.CharAlreadyExists, charCreateCommand.Payload().Answer)
 }
 
 func TestCharCommandGenerator_Create_WrongClassGiven(t *testing.T) {
@@ -109,5 +109,5 @@ func TestCharCommandGenerator_Create_WrongClassGiven(t *testing.T) {
 
 	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "wrong", "1234")
 	require.NoError(t, err, "should create char command")
-	assert.Equal(t, helpers.WrongClassGiven, charCreateCommand.Payload.Answer)
+	assert.Equal(t, helpers.WrongClassGiven, charCreateCommand.Payload().Answer)
 }

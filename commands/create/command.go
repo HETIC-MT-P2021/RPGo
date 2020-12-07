@@ -11,7 +11,7 @@ import (
 //CharacterCreateCommand model for character creation command
 type CharacterCreateCommand struct {
 	Receiver *Receiver
-	Payload  *CharacterCreateCommandPayload
+	payload  *CharacterCreateCommandPayload
 }
 
 //CharacterCreateCommandPayload model for information on character creation command
@@ -56,7 +56,7 @@ func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnector, 
 
 	return &CharacterCreateCommand{
 		Receiver: &Receiver{},
-		Payload: &CharacterCreateCommandPayload{
+		payload: &CharacterCreateCommandPayload{
 			Answer:  answer,
 			session: c,
 			Message: m,
@@ -66,12 +66,12 @@ func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnector, 
 
 //Execute command with all its information
 func (c *CharacterCreateCommand) Execute() {
-	c.Receiver.Answer(c.GetPayload())
+	c.Receiver.Answer(c.Payload())
 }
 
-//GetPayload returns CharacterCreateCommand payload
-func (c *CharacterCreateCommand) GetPayload() *CharacterCreateCommandPayload {
-	return c.Payload
+//Payload returns CharacterCreateCommand payload
+func (c *CharacterCreateCommand) Payload() *CharacterCreateCommandPayload {
+	return c.payload
 }
 
 //Session returns CharacterCreateCommand session
