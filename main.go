@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/HETIC-MT-P2021/RPGo/commands/create"
+	"github.com/HETIC-MT-P2021/RPGo/commands/presentation"
 	"github.com/HETIC-MT-P2021/RPGo/database"
 	customenv "github.com/HETIC-MT-P2021/RPGo/env"
 	"github.com/HETIC-MT-P2021/RPGo/helpers"
@@ -114,5 +115,20 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			helpers.SendGenericErrorMessage(s, m.ChannelID)
 			return
 		}
+	}else if(strings.HasPrefix(m.Content, customenv.DiscordPrefix+"presentation")){
+		commandGenerator := presentation.CharCommandGenerator{
+			Repo: &repository.CharacterRepository{
+				Conn: database.DBCon,
+			}}
+
+		createCommand, err := commandGenerator.PresentationCommand(s, m, m.Author.ID)
+		if err != nil {
+			log.Println(err)
+			helpers.SendGenericErrorMessage(s, m.ChannelID)
+			return
+		}
+		createCommand.Execute()
+
+		return
 	}
 }
