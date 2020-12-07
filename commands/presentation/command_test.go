@@ -50,14 +50,14 @@ func TestCharCommandGenerator_Presentation(t *testing.T) {
 				ID:        "428",
 				ChannelID: "43",
 				GuildID:   "",
-				Content:   "character presentation test, no character",
+				Content:   "character presentation test",
 			}
 
 			messageCreate := discordgo.MessageCreate{Message: &message}
 
 			generator := presentation.CharCommandGenerator{Repo: m}
 
-			charPresentationCommand, err := generator.PresentationCommand(s, &messageCreate, "1234")
+			charPresentationCommand, err := generator.PresentationCommand(s, &messageCreate, char.DiscordUserID)
 			require.NoError(t, err, "should create presentation command")
 			assert.Equal(t, parameters.answer,
 				charPresentationCommand.Payload().Answer)

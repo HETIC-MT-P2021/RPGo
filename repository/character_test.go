@@ -4,10 +4,9 @@ import (
 	"database/sql"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/HETIC-MT-P2021/RPGo/repository"
+	"github.com/stretchr/testify/assert"
 	"log"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 var character = &repository.Character{
@@ -26,7 +25,7 @@ func NewMock() (*sql.DB, sqlmock.Sqlmock) {
 }
 
 func TestCharacterRepository_GetCharacterByDiscordUserID(t *testing.T) {
-	for n, c := range map[string]struct {
+	for index, parameters := range map[string]struct {
 		query string
 		rows  *sqlmock.Rows
 		char  *repository.Character
@@ -42,15 +41,15 @@ func TestCharacterRepository_GetCharacterByDiscordUserID(t *testing.T) {
 			char:  nil,
 		},
 	} {
-		t.Run(n, func(t *testing.T) {
+		t.Run(index, func(t *testing.T) {
 			db, mock := NewMock()
 			repo := &repository.CharacterRepository{Conn: db}
 			defer func() {
 				repo.Close()
 			}()
-			mock.ExpectQuery(c.query).WithArgs(character.DiscordUserID).WillReturnRows(c.rows)
+			mock.ExpectQuery(parameters.query).WithArgs(character.DiscordUserID).WillReturnRows(parameters.rows)
 			character, err := repo.GetCharacterByDiscordUserID(character.DiscordUserID)
-			assert.Equal(t, character, c.char)
+			assert.Equal(t, character, parameters.char)
 			assert.NoError(t, err)
 		})
 	}
