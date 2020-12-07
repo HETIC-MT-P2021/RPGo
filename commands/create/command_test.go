@@ -1,8 +1,9 @@
-package create
+package create_test
 
 import (
 	"fmt"
 	"github.com/HETIC-MT-P2021/RPGo/commands"
+	"github.com/HETIC-MT-P2021/RPGo/commands/create"
 	"github.com/HETIC-MT-P2021/RPGo/helpers"
 	"github.com/HETIC-MT-P2021/RPGo/repository"
 	"github.com/bwmarrin/discordgo"
@@ -44,12 +45,12 @@ func TestCharCommandGenerator_Create_UserDoesNotExist(t *testing.T) {
 
 	messageCreate := discordgo.MessageCreate{Message: &message}
 
-	generator := CharCommandGenerator{Repo: m}
+	generator := create.CharCommandGenerator{Repo: m}
 
 	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "rogue", "1234")
 	require.NoError(t, err, "should create char command")
 	assert.Equal(t, fmt.Sprintf(helpers.CharSuccessfullyCreated, char.Name),
-		charCreateCommand.payload.Answer)
+		charCreateCommand.Payload.Answer)
 
 }
 
@@ -75,11 +76,11 @@ func TestCharCommandGenerator_Create_UserExists(t *testing.T) {
 
 	messageCreate := discordgo.MessageCreate{Message: &message}
 
-	generator := CharCommandGenerator{Repo: m}
+	generator := create.CharCommandGenerator{Repo: m}
 
 	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "rogue", "1234")
 	require.NoError(t, err, "should create char command")
-	assert.Equal(t, helpers.CharAlreadyExists, charCreateCommand.payload.Answer)
+	assert.Equal(t, helpers.CharAlreadyExists, charCreateCommand.Payload.Answer)
 }
 
 func TestCharCommandGenerator_Create_WrongClassGiven(t *testing.T) {
@@ -104,9 +105,9 @@ func TestCharCommandGenerator_Create_WrongClassGiven(t *testing.T) {
 
 	messageCreate := discordgo.MessageCreate{Message: &message}
 
-	generator := CharCommandGenerator{Repo: m}
+	generator := create.CharCommandGenerator{Repo: m}
 
 	charCreateCommand, err := generator.CreateCommand(s, &messageCreate, "TestChar", "wrong", "1234")
 	require.NoError(t, err, "should create char command")
-	assert.Equal(t, helpers.WrongClassGiven, charCreateCommand.payload.Answer)
+	assert.Equal(t, helpers.WrongClassGiven, charCreateCommand.Payload.Answer)
 }
