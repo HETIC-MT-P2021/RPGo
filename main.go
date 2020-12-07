@@ -135,7 +135,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			return
 		}
-	}else if(strings.HasPrefix(m.Content, customenv.DiscordPrefix+"presentation")){
+	} else if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"presentation") {
 		commandGenerator := presentation.CharCommandGenerator{
 			Repo: &repository.CharacterRepository{
 				Conn: database.DBCon,
