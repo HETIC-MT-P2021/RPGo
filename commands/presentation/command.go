@@ -38,10 +38,11 @@ func (command *CharCommandGenerator) PresentationCommand(c commands.DiscordConne
 	}
 
 	// CreateCommand a character if none found in DB
-	if char != nil {
+	if char == nil {
+		answer = helpers.CharacterDoesNotExist
+	} else {
 		answer = fmt.Sprintf(helpers.CharacterPresentation, char.Name, char.Class)
 	}
-
 
 	return &CharacterPresentationCommand{
 		Receiver: &Receiver{},

@@ -78,6 +78,11 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	if len(m.Author.ID) == 0 {
+		helpers.SendGenericErrorMessage(s, m.ChannelID)
+		return
+	}
+
 	if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"create") {
 		if len(strings.Fields(m.Content)) > 1 {
 			args := make([]string, 0)
@@ -115,7 +120,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			helpers.SendGenericErrorMessage(s, m.ChannelID)
 			return
 		}
-	}else if(strings.HasPrefix(m.Content, customenv.DiscordPrefix+"presentation")){
+	} else if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"presentation") {
 		commandGenerator := presentation.CharCommandGenerator{
 			Repo: &repository.CharacterRepository{
 				Conn: database.DBCon,
