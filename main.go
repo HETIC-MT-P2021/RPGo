@@ -119,12 +119,11 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if err != nil {
 			helpers.SendGenericErrorMessage(s, m.ChannelID)
 			return
-		}
-	} else if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"presentation") {
-		commandGenerator := presentation.CharCommandGenerator{
-			Repo: &repository.CharacterRepository{
-				Conn: database.DBCon,
-			}}
+		}else if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"presentation") {
+			commandGenerator := presentation.CharCommandGenerator{
+				Repo: &repository.CharacterRepository{
+					Conn: database.DBCon,
+				}}
 
 		createCommand, err := commandGenerator.PresentationCommand(s, m, m.Author.ID)
 		if err != nil {
