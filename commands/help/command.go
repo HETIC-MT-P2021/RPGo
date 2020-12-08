@@ -19,7 +19,7 @@ type CommandPayload struct {
 	Message *discordgo.MessageCreate
 }
 
-//Command a help command
+//MakeCommand a help command
 func MakeCommand(c commands.DiscordConnectorMessageEmbed, m *discordgo.MessageCreate) *Command {
 	field := &discordgo.MessageEmbedField{
 		Name:   "New player ?",

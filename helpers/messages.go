@@ -33,6 +33,7 @@ func SendGenericErrorMessage(session commands.DiscordConnectorMessage, channelID
 	session.ChannelMessageSend(channelID, GenericUserError)
 }
 
+//SendGenericErrorEmbedMessage sends an error message to end user with embed style
 func SendGenericErrorEmbedMessage(session commands.DiscordConnectorMessageEmbed, channelID string) {
 	session.ChannelMessageSendEmbed(channelID, errorEmbed)
 }

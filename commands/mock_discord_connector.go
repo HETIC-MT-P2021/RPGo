@@ -47,3 +47,16 @@ func (mr *MockDiscordConnectorMockRecorder) ChannelMessageSend(arg0, arg1 interf
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChannelMessageSend", reflect.TypeOf((*MockDiscordConnector)(nil).ChannelMessageSend), arg0, arg1)
 }
+
+func (m *MockDiscordConnector) ChannelMessageSendEmbed(arg0 string, arg1 *discordgo.MessageEmbed) (*discordgo.Message, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ChannelMessageSendEmbed", arg0, arg1)
+	ret0, _ := ret[0].(*discordgo.Message)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+func (mr *MockDiscordConnectorMockRecorder) ChannelMessageSendEmbed(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChannelMessageSendEmbed", reflect.TypeOf((*MockDiscordConnector)(nil).ChannelMessageSendEmbed), arg0, arg1)
+}
