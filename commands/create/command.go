@@ -6,6 +6,7 @@ import (
 	"github.com/HETIC-MT-P2021/RPGo/helpers"
 	"github.com/HETIC-MT-P2021/RPGo/repository"
 	"github.com/bwmarrin/discordgo"
+	"log"
 )
 
 //CharacterCreateCommand model for character creation command
@@ -34,6 +35,7 @@ func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnector, 
 	if err != nil {
 		return nil, fmt.Errorf("couldn't get character with userID: %s, %v", userID, err)
 	}
+	log.Printf("char: %+v", char)
 
 	if !class.IsValid() {
 
@@ -64,6 +66,8 @@ func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnector, 
 		Class:         class,
 		DiscordUserID: userID,
 	}
+
+	log.Printf("character: %+v", character)
 
 	err = command.Repo.Create(&character)
 	if err != nil {
