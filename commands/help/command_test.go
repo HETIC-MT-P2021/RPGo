@@ -27,12 +27,6 @@ func TestHelpCommand(t *testing.T) {
 		Title:       "RPGo help",
 		Description: "Welcome to RPGo, here's all the help you need to play with the bot !",
 		Color:       6744188,
-		Footer:      nil,
-		Image:       nil,
-		Thumbnail:   nil,
-		Video:       nil,
-		Provider:    nil,
-		Author:      nil,
 		Fields:      fields,
 	}
 

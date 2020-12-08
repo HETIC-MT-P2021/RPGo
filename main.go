@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/HETIC-MT-P2021/RPGo/commands"
 	"github.com/HETIC-MT-P2021/RPGo/commands/create"
-	"github.com/HETIC-MT-P2021/RPGo/commands/presentation"
 	"github.com/HETIC-MT-P2021/RPGo/commands/help"
+	"github.com/HETIC-MT-P2021/RPGo/commands/presentation"
 	"github.com/HETIC-MT-P2021/RPGo/database"
 	customenv "github.com/HETIC-MT-P2021/RPGo/env"
 	"github.com/HETIC-MT-P2021/RPGo/helpers"
@@ -92,9 +92,14 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"help") {
 		messageHelp(s, m)
 	}
+
+	if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"presentation") {
+		messagePresentation(s, m)
+	}
 }
 
 func messageCreateCharacter(s *discordgo.Session, m *discordgo.MessageCreate) {
+	log.Printf("fields 1 : %+v", strings.Fields(m.Content))
 	if len(strings.Fields(m.Content)) > 1 {
 		args := make([]string, 0)
 		for _, word := range strings.Fields(m.Content) {
@@ -115,40 +120,15 @@ func messageCreateCharacter(s *discordgo.Session, m *discordgo.MessageCreate) {
 				Conn: database.DBCon,
 			}}
 
-		_, err := commandGenerator.CreateCommand(s, m, args[1], commands.Class(args[2]), m.Author.ID)
-		if err != nil {
-			log.Println(err)
-			helpers.SendGenericErrorMessage(s, m.ChannelID)
-			return
-		} else if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"presentation") {
-			commandGenerator := presentation.CharCommandGenerator{
-				Repo: &repository.CharacterRepository{
-					Conn: database.DBCon,
-				}}
-
-			createCommand, err := commandGenerator.PresentationCommand(s, m, m.Author.ID)
-			if err != nil {
-				log.Println(err)
-				helpers.SendGenericErrorMessage(s, m.ChannelID)
-				return
-			}
-			createCommand.Execute()
-
-			return
-		}
-	} else if strings.HasPrefix(m.Content, customenv.DiscordPrefix+"presentation") {
-		commandGenerator := presentation.CharCommandGenerator{
-			Repo: &repository.CharacterRepository{
-				Conn: database.DBCon,
-			}}
-
-		createCommand, err := commandGenerator.PresentationCommand(s, m, m.Author.ID)
+		createCharCommand, err := commandGenerator.CreateCommand(s, m, args[1], commands.Class(args[2]),
+			m.Author.ID)
 		if err != nil {
 			log.Println(err)
 			helpers.SendGenericErrorMessage(s, m.ChannelID)
 			return
 		}
-		createCommand.Execute()
+
+		createCharCommand.Execute()
 
 		return
 	}
@@ -168,4 +148,24 @@ func messageHelp(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	helpCommand := help.MakeCommand(s, m)
 	helpCommand.Execute()
+}
+
+func messagePresentation(s *discordgo.Session, m *discordgo.MessageCreate) {
+	if len(strings.Fields(m.Content)) > 1 {
+		helpers.SendGenericErrorMessage(s, m.ChannelID)
+		return
+	}
+
+	commandGenerator := presentation.CharCommandGenerator{
+		Repo: &repository.CharacterRepository{
+			Conn: database.DBCon,
+		}}
+
+	createPresCommand, err := commandGenerator.PresentationCommand(s, m, m.Author.ID)
+	if err != nil {
+		log.Println(err)
+		helpers.SendGenericErrorMessage(s, m.ChannelID)
+		return
+	}
+	createPresCommand.Execute()
 }

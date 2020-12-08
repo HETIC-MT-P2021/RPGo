@@ -3,6 +3,7 @@ package help
 import (
 	"github.com/HETIC-MT-P2021/RPGo/commands"
 	customenv "github.com/HETIC-MT-P2021/RPGo/env"
+	"github.com/HETIC-MT-P2021/RPGo/helpers"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -15,12 +16,12 @@ type Command struct {
 //CommandPayload model for information on help command
 type CommandPayload struct {
 	Answer  *discordgo.MessageEmbed
-	session commands.DiscordConnectorMessageEmbed
+	session commands.DiscordConnector
 	Message *discordgo.MessageCreate
 }
 
 //MakeCommand a help command
-func MakeCommand(c commands.DiscordConnectorMessageEmbed, m *discordgo.MessageCreate) *Command {
+func MakeCommand(c commands.DiscordConnector, m *discordgo.MessageCreate) *Command {
 	field := &discordgo.MessageEmbedField{
 		Name:   "New player ?",
 		Value:  "Try to type `" + customenv.DiscordPrefix + "create {characterName} {characterClass}` to create your own character !",
@@ -29,19 +30,13 @@ func MakeCommand(c commands.DiscordConnectorMessageEmbed, m *discordgo.MessageCr
 
 	var fields = make([]*discordgo.MessageEmbedField, 0)
 
+	// Here possibility to add help fields as the project grows
 	fields = append(fields, field)
-	lightGreenDecimal := 6744188
 
 	answer := &discordgo.MessageEmbed{
 		Title:       "RPGo help",
 		Description: "Welcome to RPGo, here's all the help you need to play with the bot !",
-		Color:       lightGreenDecimal,
-		Footer:      nil,
-		Image:       nil,
-		Thumbnail:   nil,
-		Video:       nil,
-		Provider:    nil,
-		Author:      nil,
+		Color:       helpers.LightGreenDecimal,
 		Fields:      fields,
 	}
 
@@ -66,6 +61,6 @@ func (c *Command) Payload() *CommandPayload {
 }
 
 //Session returns CreateCommand session
-func (p *CommandPayload) Session() commands.DiscordConnectorMessageEmbed {
+func (p *CommandPayload) Session() commands.DiscordConnector {
 	return p.session
 }

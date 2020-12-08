@@ -10,7 +10,7 @@ import (
 	reflect "reflect"
 )
 
-// MockDiscordConnector is a mock of DiscordConnectorMessage interface
+// MockDiscordConnector is a mock of DiscordConnector interface
 type MockDiscordConnector struct {
 	ctrl     *gomock.Controller
 	recorder *MockDiscordConnectorMockRecorder
@@ -48,6 +48,7 @@ func (mr *MockDiscordConnectorMockRecorder) ChannelMessageSend(arg0, arg1 interf
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChannelMessageSend", reflect.TypeOf((*MockDiscordConnector)(nil).ChannelMessageSend), arg0, arg1)
 }
 
+// ChannelMessageSendEmbed mocks base method
 func (m *MockDiscordConnector) ChannelMessageSendEmbed(arg0 string, arg1 *discordgo.MessageEmbed) (*discordgo.Message, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChannelMessageSendEmbed", arg0, arg1)
@@ -56,6 +57,7 @@ func (m *MockDiscordConnector) ChannelMessageSendEmbed(arg0 string, arg1 *discor
 	return ret0, ret1
 }
 
+// ChannelMessageSendEmbed indicates an expected call of ChannelMessageSendEmbed
 func (mr *MockDiscordConnectorMockRecorder) ChannelMessageSendEmbed(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChannelMessageSendEmbed", reflect.TypeOf((*MockDiscordConnector)(nil).ChannelMessageSendEmbed), arg0, arg1)

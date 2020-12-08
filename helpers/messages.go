@@ -18,22 +18,15 @@ const (
 var errorEmbed = &discordgo.MessageEmbed{
 	Title:       "Oops!",
 	Description: "An issue occurred, please try again later",
-	Color:       12720923,
-	Footer:      nil,
-	Image:       nil,
-	Thumbnail:   nil,
-	Video:       nil,
-	Provider:    nil,
-	Author:      nil,
-	Fields:      nil,
+	Color:       ErrorRedColor,
 }
 
 //SendGenericErrorMessage sends an error message to end user
-func SendGenericErrorMessage(session commands.DiscordConnectorMessage, channelID string) {
+func SendGenericErrorMessage(session commands.DiscordConnector, channelID string) {
 	session.ChannelMessageSend(channelID, GenericUserError)
 }
 
 //SendGenericErrorEmbedMessage sends an error message to end user with embed style
-func SendGenericErrorEmbedMessage(session commands.DiscordConnectorMessageEmbed, channelID string) {
+func SendGenericErrorEmbedMessage(session commands.DiscordConnector, channelID string) {
 	session.ChannelMessageSendEmbed(channelID, errorEmbed)
 }

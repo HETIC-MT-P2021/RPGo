@@ -2,12 +2,8 @@ package commands
 
 import "github.com/bwmarrin/discordgo"
 
-//DiscordConnectorMessage interface for sessions
-type DiscordConnectorMessage interface {
+//DiscordConnector interface for sessions
+type DiscordConnector interface {
 	ChannelMessageSend(string, string) (*discordgo.Message, error)
-}
-
-//DiscordConnectorMessageEmbed interface for sessions
-type DiscordConnectorMessageEmbed interface {
 	ChannelMessageSendEmbed(string, *discordgo.MessageEmbed) (*discordgo.Message, error)
 }

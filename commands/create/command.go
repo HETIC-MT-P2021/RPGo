@@ -6,6 +6,7 @@ import (
 	"github.com/HETIC-MT-P2021/RPGo/helpers"
 	"github.com/HETIC-MT-P2021/RPGo/repository"
 	"github.com/bwmarrin/discordgo"
+	"log"
 )
 
 //CharacterCreateCommand model for character creation command
@@ -17,7 +18,7 @@ type CharacterCreateCommand struct {
 //CharacterCreateCommandPayload model for information on character creation command
 type CharacterCreateCommandPayload struct {
 	Answer  string
-	session commands.DiscordConnectorMessage
+	session commands.DiscordConnector
 	Message *discordgo.MessageCreate
 }
 
@@ -27,13 +28,14 @@ type CharCommandGenerator struct {
 }
 
 //CreateCommand a character creation command
-func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnectorMessage, m *discordgo.MessageCreate,
+func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnector, m *discordgo.MessageCreate,
 	name string, class commands.Class, userID string) (*CharacterCreateCommand, error) {
 
 	char, err := command.Repo.GetCharacterByDiscordUserID(userID)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't get character with userID: %s, %v", userID, err)
 	}
+	log.Printf("char: %+v", char)
 
 	if !class.IsValid() {
 
@@ -65,6 +67,8 @@ func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnectorMe
 		DiscordUserID: userID,
 	}
 
+	log.Printf("character: %+v", character)
+
 	err = command.Repo.Create(&character)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't create character: %v", err)
@@ -91,6 +95,6 @@ func (c *CharacterCreateCommand) Payload() *CharacterCreateCommandPayload {
 }
 
 //Session returns CharacterCreateCommand session
-func (p *CharacterCreateCommandPayload) Session() commands.DiscordConnectorMessage {
+func (p *CharacterCreateCommandPayload) Session() commands.DiscordConnector {
 	return p.session
 }
