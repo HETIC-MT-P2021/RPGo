@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/HETIC-MT-P2021/RPGo/commands"
 	"github.com/HETIC-MT-P2021/RPGo/commands/create"
 	"github.com/HETIC-MT-P2021/RPGo/commands/presentation"
 	"github.com/HETIC-MT-P2021/RPGo/database"
@@ -104,7 +105,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 					Conn: database.DBCon,
 				}}
 
-			createCommand, err := commandGenerator.CreateCommand(s, m, args[1], repository.Class(args[2]), m.Author.ID)
+			createCommand, err := commandGenerator.CreateCommand(s, m, args[1], commands.Class(args[2]), m.Author.ID)
 			if err != nil {
 				log.Println(err)
 				helpers.SendGenericErrorMessage(s, m.ChannelID)
