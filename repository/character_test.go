@@ -15,6 +15,14 @@ var character = &repository.Character{
 	DiscordUserID: "1234",
 }
 
+type testCaseData struct {
+	query string
+	rows  *sqlmock.Rows
+	char  *repository.Character
+}
+
+type testCases map[string]testCaseData
+
 func NewMock() (*sql.DB, sqlmock.Sqlmock) {
 	db, mock, err := sqlmock.New()
 	if err != nil {
@@ -25,22 +33,21 @@ func NewMock() (*sql.DB, sqlmock.Sqlmock) {
 }
 
 func TestCharacterRepository_GetCharacterByDiscordUserID(t *testing.T) {
-	for index, parameters := range map[string]struct {
-		query string
-		rows  *sqlmock.Rows
-		char  *repository.Character
-	}{
-		"should find existing character": {
+
+	cases := testCases{
+		"should find existing character": testCaseData{
 			query: "SELECT pc.id, pc.name, pc.class, pc.discord_user_id FROM p_character pc WHERE pc.discord_user_id = \\?",
 			rows:  sqlmock.NewRows([]string{"id", "name", "class", "discord_user_id"}).AddRow(character.ID, character.Name, character.Class, character.DiscordUserID),
 			char:  character,
 		},
-		"should not find existing character": {
+		"should not find existing character": testCaseData{
 			query: "SELECT pc.id, pc.name, pc.class, pc.discord_user_id FROM p_character pc WHERE pc.discord_user_id = \\?",
 			rows:  sqlmock.NewRows([]string{"id", "name", "class", "discord_user_id"}),
 			char:  nil,
 		},
-	} {
+	}
+
+	for index, parameters := range cases {
 		t.Run(index, func(t *testing.T) {
 			db, mock := NewMock()
 			repo := &repository.CharacterRepository{Conn: db}

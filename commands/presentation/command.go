@@ -8,13 +8,13 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-//CharacterPresentCommand model for user's character presentation
+//CharacterPresentationCommand model for user's character presentation
 type CharacterPresentationCommand struct {
 	Receiver *Receiver
 	payload  *CharacterPresentationCommandPayload
 }
 
-//CharacterPresentCommandPayload model for information on character presentation command
+//CharacterPresentationCommandPayload model for information on character presentation command
 type CharacterPresentationCommandPayload struct {
 	Answer  string
 	session commands.DiscordConnector
@@ -26,11 +26,11 @@ type CharCommandGenerator struct {
 	Repo repository.CharacterRepositoryInterface
 }
 
-//CreateCommand a character creation command
+//PresentationCommand a character creation command
 func (command *CharCommandGenerator) PresentationCommand(c commands.DiscordConnector, m *discordgo.MessageCreate,
 	userID string) (*CharacterPresentationCommand, error) {
 
-	answer := helpers.GenericUserError
+	var answer string
 
 	char, err := command.Repo.GetCharacterByDiscordUserID(userID)
 	if err != nil {

@@ -19,11 +19,15 @@ var char = &repository.Character{
 	DiscordUserID: "1234",
 }
 
+type testCaseData struct {
+	character *repository.Character
+	answer    string
+}
+
+type testCases map[string]testCaseData
+
 func TestCharCommandGenerator_Presentation(t *testing.T) {
-	for index, parameters := range map[string]struct {
-		character *repository.Character
-		answer    string
-	}{
+	cases := testCases{
 		"character does exist": {
 			character: char,
 			answer:    fmt.Sprintf(helpers.CharacterPresentation, char.Name, char.Class),
@@ -32,7 +36,8 @@ func TestCharCommandGenerator_Presentation(t *testing.T) {
 			character: nil,
 			answer:    helpers.CharacterDoesNotExist,
 		},
-	} {
+	}
+	for index, parameters := range cases {
 		t.Run(index, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
@@ -42,7 +47,7 @@ func TestCharCommandGenerator_Presentation(t *testing.T) {
 			m.EXPECT().GetCharacterByDiscordUserID(char.DiscordUserID).DoAndReturn(func(_ string) (*repository.
 				Character, error) {
 				return parameters.character, nil
-			}).MaxTimes(1)
+			}).Times(1)
 
 			s := commands.NewMockDiscordConnector(ctrl)
 
@@ -59,8 +64,7 @@ func TestCharCommandGenerator_Presentation(t *testing.T) {
 
 			charPresentationCommand, err := generator.PresentationCommand(s, &messageCreate, char.DiscordUserID)
 			require.NoError(t, err, "should create presentation command")
-			assert.Equal(t, parameters.answer,
-				charPresentationCommand.Payload().Answer)
+			assert.Equal(t, parameters.answer, charPresentationCommand.Payload().Answer)
 		})
 	}
 }

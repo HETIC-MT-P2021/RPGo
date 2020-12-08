@@ -8,7 +8,7 @@ const (
 	CharSuccessfullyCreated = "%s successfully created!"
 	WrongClassGiven         = "You have to choose an existing class among : ['wizard', 'rogue', 'knight']!"
 	GenericUserError        = "An issue occurred, please try again later."
-	CharacterPresentation   = "Hello dear friend, my name is %s and I am a proud %s"
+	CharacterPresentation   = "Hello dear friend, my name is %s and I am a proud %v"
 	CharacterDoesNotExist   = "Character does not exist, create your character first"
 )
 

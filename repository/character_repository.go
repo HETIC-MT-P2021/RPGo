@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"github.com/HETIC-MT-P2021/RPGo/commands"
 )
 
 //CharacterRepositoryInterface interface for functions for character repository
@@ -24,26 +25,7 @@ func (repository *CharacterRepository) Close() {
 type Character struct {
 	ID            int64
 	Name          string
-	Class         Class
+	Class         commands.Class
 	DiscordUserID string
 	//@toDo add an inventory implem, this is user v0
-}
-
-//Class enum type
-type Class string
-
-//Defines the possible classes a user can choose
-const (
-	Rogue  Class = "rogue"
-	Knight Class = "knight"
-	Wizard Class = "wizard"
-)
-
-//IsValid returns true if the class is an existing one
-func (class Class) IsValid() bool {
-	switch class {
-	case Rogue, Knight, Wizard:
-		return true
-	}
-	return false
 }

@@ -28,36 +28,52 @@ type CharCommandGenerator struct {
 
 //CreateCommand a character creation command
 func (command *CharCommandGenerator) CreateCommand(c commands.DiscordConnector, m *discordgo.MessageCreate,
-	name string, class repository.Class, userID string) (*CharacterCreateCommand, error) {
+	name string, class commands.Class, userID string) (*CharacterCreateCommand, error) {
 
-	answer := helpers.CharAlreadyExists
 	char, err := command.Repo.GetCharacterByDiscordUserID(userID)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't get character with userID: %s, %v", userID, err)
 	}
 
-	// CreateCommand a character if none found in DB
-	if char == nil && class.IsValid() {
-		character := repository.Character{
-			Name:          name,
-			Class:         class,
-			DiscordUserID: userID,
-		}
-		err := command.Repo.Create(&character)
-		if err != nil {
-			return nil, fmt.Errorf("couldn't create character: %v", err)
-		}
-		answer = fmt.Sprintf(helpers.CharSuccessfullyCreated, name)
+	if !class.IsValid() {
+
+		return &CharacterCreateCommand{
+			Receiver: &Receiver{},
+			payload: &CharacterCreateCommandPayload{
+				Answer:  helpers.WrongClassGiven,
+				session: c,
+				Message: m,
+			}}, nil
 	}
 
-	if !class.IsValid() && char == nil {
-		answer = helpers.WrongClassGiven
+	if char != nil {
+
+		return &CharacterCreateCommand{
+			Receiver: &Receiver{},
+			payload: &CharacterCreateCommandPayload{
+				Answer:  helpers.CharAlreadyExists,
+				session: c,
+				Message: m,
+			}}, nil
+	}
+
+	//@toDo add newCreateCharacterCommand
+
+	character := repository.Character{
+		Name:          name,
+		Class:         class,
+		DiscordUserID: userID,
+	}
+
+	err = command.Repo.Create(&character)
+	if err != nil {
+		return nil, fmt.Errorf("couldn't create character: %v", err)
 	}
 
 	return &CharacterCreateCommand{
 		Receiver: &Receiver{},
 		payload: &CharacterCreateCommandPayload{
-			Answer:  answer,
+			Answer:  fmt.Sprintf(helpers.CharSuccessfullyCreated, name),
 			session: c,
 			Message: m,
 		},
